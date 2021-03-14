@@ -1,6 +1,7 @@
 ﻿using EntityFramework.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace EntityFramework
@@ -15,9 +16,34 @@ namespace EntityFramework
                 Console.Clear();
                 await Read();
                 await Create();
+                
+                await Update();
                 Console.ReadLine();
             }
             
+        }
+
+        private static async Task Update()
+        {
+            Console.Write("Id: ");
+            var id = int.Parse(Console.ReadLine());
+            using (var alifcontext = new AppDbContext())
+            {
+                var customers = await alifcontext.Customers.FindAsync(id);
+                Console.WriteLine("Enter your FirstName: ");
+                customers.FirstName = Console.ReadLine();
+                Console.WriteLine("Enter your LastName: ");
+                customers.LastName = Console.ReadLine();
+                Console.WriteLine("Enter your MiddleName: ");
+                customers.MidlleName = Console.ReadLine();
+                Console.WriteLine("Enter you DateBirth(ex: yyyy - mm - dd)");
+                customers.DateOfBirth = DateTime.Parse(Console.ReadLine());
+                Console.WriteLine("Enter your DocumentNo: ");
+                customers.DocumentNumber = Console.ReadLine();
+
+                await alifcontext.SaveChangesAsync();
+            }
+
         }
 
         private static async Task Create()
