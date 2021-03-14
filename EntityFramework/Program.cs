@@ -16,12 +16,26 @@ namespace EntityFramework
                 Console.Clear();
                 await Read();
                 await Create();
-                
                 await Update();
+                await Delete();
                 Console.ReadLine();
             }
             
         }
+
+        private static async Task Delete()
+        {
+            Console.Write("Id: ");
+            var id = int.Parse(Console.ReadLine());
+            using (var alifcontext = new AppDbContext())
+            {
+                var customers = await alifcontext.Customers.FindAsync(id);
+                alifcontext.Remove(customers);
+
+                await alifcontext.SaveChangesAsync();
+            }
+        }
+
 
         private static async Task Update()
         {
